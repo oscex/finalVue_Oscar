@@ -1,12 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Inicio from '../views/Inicio.vue'
-import Inicio from '../views/VistaClasificacion.vue'
-import Inicio from '../views/VistaEliminarJugador.vue'
-import Inicio from '../views/VistaEquipos.vue'
-import Inicio from '../views/VistaJornadas.vue'
-import Inicio from '../views/VistaJugadores.vue'
-import Inicio from '../views/VistaNuevoJugador.vue'
-import Inicio from '../views/VistaNuevoPartido.vue'
+import VistaClasificacion from '../views/VistaClasificacion.vue'
+import VistaEliminarJugador from '../views/VistaEliminarJugador.vue'
+import VistaEquipos from '../views/VistaEquipos.vue'
+import VistaJornadas from '../views/VistaJornadas.vue'
+import VistaJugadores from '../views/VistaJugadores.vue'
+import VistaNuevoJugador from '../views/VistaNuevoJugador.vue'
+import VistaNuevoPartido from '../views/VistaNuevoPartido.vue'
 
 const routes = [
   {
@@ -17,52 +17,37 @@ const routes = [
   {
     path: '/VistaClasificacion',
     name: 'VistaClasificacion',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/VistaClasificacion.vue')
+    component: VistaClasificacion
   },
   {
     path: '/VistaEliminarJugador',
     name: 'VistaEliminarJugador',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    component: VistaEliminarJugador
   },
   {
     path: '/VistaEquipos',
     name: 'VistaEquipos',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    component: VistaEquipos
   },
   {
     path: '/VistaJornadas',
     name: 'VistaJornadas',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    component: VistaJornadas
   },
   {
-    path: '/VistaClasificacion',
-    name: 'VistaClasificacion',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: '/VistaJugadores',
+    name: 'VistaJugadores',
+    component: VistaJugadores
   },
   {
     path: '/VistaNuevoJugador',
     name: 'VistaNuevoJugador',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    component: VistaNuevoJugador
   },
   {
-    path: '/VistaNuevoPartdo',
-    name: 'VistaNuevoPartdo',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: '/VistaNuevoPartido',
+    name: 'VistaNuevoPartido',
+    component: VistaNuevoPartido
   }
 ]
 
