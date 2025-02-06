@@ -1,6 +1,6 @@
 <template>
 <form class="container">
-    <h1>Formulario de Contacto</h1>
+    <h1>Añadir Jugador</h1>
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" placeholder="Ingresa el nombre del jugador" required v-model="nombre">
     
@@ -17,19 +17,19 @@
 export default {
   data(){
     return{
-        equipo: "",
+        equipos: [],
         equipoSeleccionado: "",
         nombre: "",
         goles: "",
-        equipoSeleccionado: ""
     }
   }, methods:  {
     cargarJugadores(){
-        datosJugador = [
-            name = this.nombre,
-            team = this.equipoSeleccionado,
-            score = this.goles
-        ]
+        let datosJugador = {
+            name: this.nombre,
+            team: this.equipoSeleccionado.name,
+            score: this.goles
+        }
+
         fetch("http://localhost:3000/players", {
             method: "POST",
             headers: {
@@ -48,9 +48,9 @@ export default {
         this.equipoSeleccionado = "",
         this.nombre = "",
         this.goles = 0
-    }
-  },  mounted() {
-    fetch("http://localhost:3000/clubs")
+    },
+    cargarEquipos() {
+        fetch("http://localhost:3000/clubs")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Error al cargar los datos");
@@ -58,12 +58,17 @@ export default {
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         this.equipos = data;
       })
       .catch((error) => {
         this.error = error.message;
       })
-  },
+    }
+  },  mounted() {
+  }, created() {
+    this.cargarEquipos();
+  }
 }
 </script>
 <style>
