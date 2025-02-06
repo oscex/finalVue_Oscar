@@ -72,6 +72,17 @@ export default {
                     ]
                 }
 
+                let joranaAComprobar = "Jornada" + this.jornada;
+                this.equipos.forEach(match => {
+                    if (match.round == joranaAComprobar && (match.team1 == this.equipoSeleccionado1 || match.team2 == this.equipoSeleccionado1)) {
+                        partidoEquipo1 = true;
+                    }
+                });
+                this.equipos.forEach(match => {
+                    if (match.round == joranaAComprobar && (match.team1 == this.equipoSeleccionado2 || match.team2 == this.equipoSeleccionado2)) {
+                        partidoEquipo2 = true;
+                    }
+                });
                 fetch("http://localhost:3000/matches", {
                     method: "POST",
                     headers: {
