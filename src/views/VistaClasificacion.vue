@@ -1,17 +1,4 @@
 <template>
-<form class="container">
-    <h1>Formulario de Contacto</h1>
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
-    
-    <label for="email">Correo Electrónico:</label>
-    <input type="email" id="email" name="email" placeholder="Ingresa tu correo" required>
-    
-    <label for="mensaje">Mensaje:</label>
-    <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje" required></textarea>
-    
-    <button type="submit">Enviar</button>
-</form>
 </template>
 <style>
 body {
