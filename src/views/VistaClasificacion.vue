@@ -26,6 +26,9 @@
                 <span>{{ jugador.name }}</span>
                 <span>{{ jugador.scores }} goles</span>
               </div>
+              <div v-if="jugadoresDelEquipo(equipo.name).length === 0" class="sin-jugadores">
+                No hay jugadores registrados
+              </div>
             </div>
           </transition>
         </div>
@@ -48,42 +51,38 @@
       }
     },
     methods: {
-    jugadoresDelEquipo(nombreEquipo) {
-      return this.jugadores.filter(jugador => 
-        jugador.club && jugador.club.trim().toLowerCase() === nombreEquipo.trim().toLowerCase()
-      );
-    },
-    
-    async cargarEquipos() {
-      try {
-        const response = await fetch("http://localhost:3000/clubs");
-        if (!response.ok) throw new Error("Error cargando equipos");
-        this.equipos = await response.json();
-      } catch (error) {
-        console.error(error);
+      jugadoresDelEquipo(nombreEquipo) {
+        return this.jugadores.filter(jugador => 
+          jugador.team && 
+          jugador.team.trim().toLowerCase() === nombreEquipo.trim().toLowerCase()
+        );
+      },
+      async cargarEquipos() {
+        try {
+          const response = await fetch("http://localhost:3000/clubs");
+          this.equipos = await response.json();
+        } catch (error) {
+          console.error("Error cargando equipos:", error);
+        }
+      },
+      async cargarJugadores() {
+        try {
+          const response = await fetch("http://localhost:3000/players");
+          this.jugadores = await response.json();
+        } catch (error) {
+          console.error("Error cargando jugadores:", error);
+        }
       }
     },
-
-    async cargarJugadores() {
-      try {
-        const response = await fetch("http://localhost:3000/players");
-        if (!response.ok) throw new Error("Error cargando jugadores");
-        this.jugadores = await response.json();
-        console.log('Jugadores cargados:', this.jugadores); // Para depuración
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  },
-    created() {
-      this.cargarEquipos();
-      this.cargarJugadores();
+    async created() {
+      await this.cargarEquipos();
+      await this.cargarJugadores();
     }
   };
   </script>
   
   <style>
-  body {
+    body {
     font-family: Arial, sans-serif;
     background-color: #ffeceb;
     margin: 0;
@@ -180,4 +179,10 @@
   ::-webkit-scrollbar {
     display: none;
 }
+  .sin-jugadores {
+    color: #666;
+    font-style: italic;
+    padding: 10px;
+  }
+  /* El resto de estilos se mantiene igual */
   </style>
