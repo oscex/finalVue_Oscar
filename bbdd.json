@@ -4,7 +4,7 @@
       "name": "SD Eibar",
       "id": "0",
       "country": "Spain",
-      "points": 0
+      "points": 6
     },
     {
       "name": "RC Celta Vigo",
@@ -28,7 +28,7 @@
       "name": "Cádiz CF",
       "id": "4",
       "country": "Spain",
-      "points": 0
+      "points": 9
     },
     {
       "name": "CA Osasuna",
@@ -46,7 +46,7 @@
       "name": "Elche CF",
       "id": "7",
       "country": "Spain",
-      "points": 0
+      "points": 4
     },
     {
       "name": "Real Madrid",
@@ -224,6 +224,12 @@
       "name": "weqew",
       "team": "Atlético Madrid",
       "score": 2
+    },
+    {
+      "id": "5012",
+      "name": "oscar",
+      "team": "Sevilla FC",
+      "score": 9
     }
   ]
 }

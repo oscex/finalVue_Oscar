@@ -27,7 +27,7 @@ export default {
         let datosJugador = {
             name: this.nombre,
             team: this.equipoSeleccionado.name,
-            score: this.goles
+            scores: this.goles
         }
 
         fetch("http://localhost:3000/players", {
