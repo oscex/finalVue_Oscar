@@ -46,61 +46,81 @@ export default {
     data() {
         return {
             equipos: [],
+            partidos: [],
             equipoSeleccionado1: "",
             equipoSeleccionado2: "",
             jornadaSeleccionada: "",
             fechaSeleccionada: "",
-            partidoJugado: "", // Asegúrate de inicializar esta propiedad
+            partidoJugado: "",
             golesEquipo1: "",
             golesEquipo2: "",
         };
     },
     methods: {
-        cargarJornada() {
-            if (!(this.equipoSeleccionado1 == "" || this.equipoSeleccionado2 == "" || this.jornadaSeleccionada == "" || this.fechaSeleccionada == "")) {
-                let datosJornada = {
-                    round: "Jornada " + this.jornadaSeleccionada,
-                    date: this.fechaSeleccionada,
-                    team1: this.equipoSeleccionado1,
-                    team2: this.equipoSeleccionado2,
-                };
+        cargarPartidos() {
+        fetch("http://localhost:3000/matches")
+            .then(response => response.json())
+            .then(data => {
+                this.partidos = data;
+                console.log(this.partidos);
+            })
+            .catch(error => console.error("Error al cargar partidos:", error));
+    },
+    cargarJornada() {
 
-                if (this.partidoJugado === 'si') {
-                    datosJornada.score = [
-                        this.golesEquipo1,
-                        this.golesEquipo2
-                    ]
-                }
+        if (!(this.equipoSeleccionado1 === "" || this.equipoSeleccionado2 === "" || this.jornadaSeleccionada === "" || this.fechaSeleccionada === "")) {
 
-                let joranaAComprobar = "Jornada" + this.jornada;
-                this.equipos.forEach(match => {
-                    if (match.round == joranaAComprobar && (match.team1 == this.equipoSeleccionado1 || match.team2 == this.equipoSeleccionado1)) {
-                        partidoEquipo1 = true;
-                    }
-                });
-                this.equipos.forEach(match => {
-                    if (match.round == joranaAComprobar && (match.team1 == this.equipoSeleccionado2 || match.team2 == this.equipoSeleccionado2)) {
-                        partidoEquipo2 = true;
-                    }
-                });
-                fetch("http://localhost:3000/matches", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(datosJornada),
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            this.reiniciarDatos();
-                        }
-                    })
-                    .catch(error => console.error("Error de conexión:", error));
+            const jornadaAComprobar = "Jornada " + this.jornadaSeleccionada;
+
+
+            const partidoEquipo1 = this.partidos.some(match => 
+                match.round === jornadaAComprobar && 
+                (match.team1 === this.equipoSeleccionado1 || match.team2 === this.equipoSeleccionado1)
+            );
+
+            const partidoEquipo2 = this.partidos.some(match => 
+                match.round === jornadaAComprobar && 
+                (match.team1 === this.equipoSeleccionado2 || match.team2 === this.equipoSeleccionado2)
+            );
+
+            if (partidoEquipo1 || partidoEquipo2) {
+                alert("Uno de los equipos ya ha jugado en esta jornada.");
+                return;
             }
-            else {
-            alert("Ha dejado campos vacios");
+
+
+            let datosJornada = {
+                round: "Jornada " + this.jornadaSeleccionada,
+                date: this.fechaSeleccionada,
+                team1: this.equipoSeleccionado1,
+                team2: this.equipoSeleccionado2,
+            };
+
+            if (this.partidoJugado === 'si') {
+                datosJornada.score = [
+                    this.golesEquipo1,
+                    this.golesEquipo2
+                ];
+            }
+
+            fetch("http://localhost:3000/matches", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(datosJornada),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        this.reiniciarDatos();
+                    }
+                })
+                .catch(error => console.error("Error de conexión:", error));
+        } else {
+            alert("Ha dejado campos vacíos");
         }
-        },
+    },
+
         reiniciarDatos() {
             this.jornadaSeleccionada = "";
             this.fechaSeleccionada = "";
@@ -128,6 +148,7 @@ export default {
     },
     created() {
         this.cargarEquipos();
+        this.cargarPartidos();
     },
     computed: {
         teams1() {
