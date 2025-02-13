@@ -302,12 +302,6 @@
       "scores": 2
     },
     {
-      "id": "7525",
-      "name": "oscar",
-      "team": "FC Barcelona",
-      "scores": 8
-    },
-    {
       "id": "4cf1",
       "name": "sdasd",
       "team": "Atlético Madrid",
@@ -342,6 +336,18 @@
       "name": "aasdasd",
       "team": "Cádiz CF",
       "scores": 1
+    },
+    {
+      "id": "617a",
+      "name": "Oscar",
+      "team": "Levante UD",
+      "scores": 1
+    },
+    {
+      "id": "f1bc",
+      "name": "Oscar",
+      "team": "Levante UD",
+      "scores": 0
     }
   ]
 }

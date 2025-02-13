@@ -1,83 +1,89 @@
 <template>
-<form class="container">
-    <h1>Añadir Jugador</h1>
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" placeholder="Ingresa el nombre del jugador" required v-model="nombre">
-    
-    <label for="equipo">Equipo:</label>
-    <select name="equipo" id="equipo" v-model="equipoSeleccionado"  :disabled="equipoFijo != null">
-        <option v-for="equipo in equipos" :value="equipo">{{equipo.name}}</option>
-    </select>
-    <label for="goler">Numero de goles metidos</label>
-    <input type="number" v-model="goles" min="0">
-    <button @click="cargarJugadores">Enviar</button>
-</form>
-</template>
-<script>
-export default {
+    <form class="container">
+      <h1>Añadir Jugador</h1>
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" placeholder="Ingresa el nombre del jugador" required v-model="nombre">
+      
+      <label for="equipo">Equipo:</label>
+      <select name="equipo" id="equipo" v-model="equipoSeleccionado" :disabled="equipoFijo !== null">
+        <option v-for="equipo in equipos" :value="equipo">{{ equipo.name }}</option>
+      </select>
+  
+      <label for="goler">Numero de goles metidos</label>
+      <input type="number" v-model="goles" min="0">
+      <button @click="cargarJugadores">Enviar</button>
+    </form>
+  </template>
+  
+  <script>
+  export default {
     props: {
-        equipoFijo: String
+      equipoFijo: {
+        type: String,
+        default: null // Si el equipo está fijo, se pasa desde el padre
+      }
     },
-  data(){
-    return{
+    data() {
+      return {
         equipos: [],
         equipoSeleccionado: "",
         nombre: "",
         goles: 0,
-    }
-  }, methods:  {
-    cargarJugadores(){
+      };
+    },
+    methods: {
+      cargarJugadores() {
         let datosJugador = {
-            name: this.nombre,
-            team: this.equipoSeleccionado.name,
-            scores: this.goles
-        }
-
+          name: this.nombre,
+          team: this.equipoSeleccionado.name,
+          scores: this.goles
+        };
+  
         fetch("http://localhost:3000/players", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(datosJugador)
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(datosJugador)
         })
         .then(response => {
-            if (response.ok) {
-                this.reiniciarDatos()
-            }
+          if (response.ok) {
+            this.reiniciarDatos();
+          }
         })
         .catch(error => console.error("Error de conexión:", error));
-    },
-    reiniciarDatos(){
+      },
+      reiniciarDatos() {
         this.equipoSeleccionado = "",
         this.nombre = "",
         this.goles = 0
-    },
-    cargarEquipos() {
+      },
+      cargarEquipos() {
         fetch("http://localhost:3000/clubs")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error al cargar los datos");
+          .then(response => response.json())
+          .then(data => {
+            this.equipos = data;
+            // Si el equipo ya está fijo, lo seleccionamos automáticamente
+            if (this.equipoFijo) {
+              const equipo = this.equipos.find(equipo => equipo.name === this.equipoFijo);
+              this.equipoSeleccionado = equipo;
+            }
+          })
+          .catch(error => console.error("Error cargando los equipos", error));
+      }
+    },
+    mounted() {
+      this.cargarEquipos();
+    },
+    watch: {
+      equipoFijo(nuevoEquipo) {
+        if (nuevoEquipo) {
+          this.equipoSeleccionado = this.equipos.find(equipo => equipo.name === nuevoEquipo);
         }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        this.equipos = data;
-      })
-      .catch((error) => {
-        this.error = error.message;
-      })
-    }
-  },  mounted() {
-  }, created() {
-    this.cargarEquipos();
-  }, watch: {
-    equipoFijo(nuevoEquipo){
-        this.equipo = nuevoEquipo;
+      }
     }
   }
-}
-</script>
+  </script>
 <style>
 body {
     font-family: Arial, sans-serif;
