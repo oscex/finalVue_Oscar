@@ -3,7 +3,7 @@
         <h1>Crear Partido</h1>
 
         <label for="Jornada">Jornada:</label>
-        <input type="number" v-model="jornadaSeleccionada" :max="38">
+        <input type="number" v-model="jornadaSeleccionada" min="0">
 
         <label for="fecha">Fecha:</label>
         <input type="date" v-model="fechaSeleccionada">

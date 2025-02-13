@@ -9,7 +9,7 @@
         <option v-for="equipo in equipos" :value="equipo">{{equipo.name}}</option>
     </select>
     <label for="goler">Numero de goles metidos</label>
-    <input type="number" v-model="goles">
+    <input type="number" v-model="goles" min="0">
     <button @click="cargarJugadores">Enviar</button>
 </form>
 </template>
@@ -20,7 +20,7 @@ export default {
         equipos: [],
         equipoSeleccionado: "",
         nombre: "",
-        goles: "",
+        goles: 0,
     }
   }, methods:  {
     cargarJugadores(){

@@ -18,13 +18,10 @@
           <transition name="slide">
             <div v-if="equipoSeleccionado === equipo.name" class="detalle-jugadores">
               <h3>Jugadores y Goles</h3>
-              <div 
-                v-for="jugador in jugadoresDelEquipo(equipo.name)" 
-                :key="jugador.id" 
-                class="jugador"
-              >
+              <div v-for="jugador in jugadoresDelEquipo(equipo.name)" :key="jugador.id" class="jugador">
                 <span>{{ jugador.name }}</span>
-                <span>{{ jugador.scores }} goles</span>
+                <span v-if="jugador.scores == 0"> Sin Goles</span>
+                <span v-else>{{ jugador.scores }} goles</span>
               </div>
               <div v-if="jugadoresDelEquipo(equipo.name).length === 0" class="sin-jugadores">
                 No hay jugadores registrados
