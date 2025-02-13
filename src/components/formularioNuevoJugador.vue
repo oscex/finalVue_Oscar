@@ -5,7 +5,7 @@
     <input type="text" id="nombre" name="nombre" placeholder="Ingresa el nombre del jugador" required v-model="nombre">
     
     <label for="equipo">Equipo:</label>
-    <select name="equipo" id="equipo" v-model="equipoSeleccionado">
+    <select name="equipo" id="equipo" v-model="equipoSeleccionado"  :disabled="equipoFijo != null">
         <option v-for="equipo in equipos" :value="equipo">{{equipo.name}}</option>
     </select>
     <label for="goler">Numero de goles metidos</label>
@@ -15,6 +15,9 @@
 </template>
 <script>
 export default {
+    props: {
+        equipoFijo: String
+    },
   data(){
     return{
         equipos: [],
@@ -68,6 +71,10 @@ export default {
   },  mounted() {
   }, created() {
     this.cargarEquipos();
+  }, watch: {
+    equipoFijo(nuevoEquipo){
+        this.equipo = nuevoEquipo;
+    }
   }
 }
 </script>
