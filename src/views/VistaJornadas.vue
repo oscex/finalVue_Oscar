@@ -38,14 +38,14 @@
 export default {
   data() {
     return {
-      jornadas: [], // Lista de jornadas disponibles con fechas
-      partidos: [], // Partidos de la jornada seleccionada
-      jornadaSeleccionada: null, // Jornada seleccionada (objeto con round y date)
-      todosPartidos: [] // Todos los partidos cargados
+      jornadas: [],
+      partidos: [],
+      jornadaSeleccionada: null,
+      todosPartidos: [],
+      clubs: [] // Lista de clubes con ID y puntos
     };
   },
   methods: {
-    // Carga los partidos de la jornada seleccionada
     cargarPartidos() {
       if (!this.jornadaSeleccionada) return;
       
@@ -58,40 +58,81 @@ export default {
         }));
     },
 
-    // Guarda el resultado de un partido
     async guardarResultado(partido) {
       try {
-        // Actualiza el partido en la base de datos
+        const score = [partido.goles1, partido.goles2];
+
         await fetch(`http://localhost:3000/matches/${partido.id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({
-            score: [partido.goles1, partido.goles2]
-          })
+          body: JSON.stringify({ score })
         });
 
-        // Actualiza el estado local
+        await this.actualizarPuntos(partido.team1, partido.team2, score);
+
         const partidoActualizado = this.todosPartidos.find(p => p.id === partido.id);
         if (partidoActualizado) {
-          partidoActualizado.score = [partido.goles1, partido.goles2];
+          partidoActualizado.score = score;
         }
 
-        // Recarga los partidos para mostrar el resultado actualizado
         this.cargarPartidos();
       } catch (error) {
         console.error("Error guardando resultado:", error);
       }
     },
 
-    // Carga todos los partidos al iniciar
-    async cargarTodosPartidos() {
+    async actualizarPuntos(team1Name, team2Name, score) {
+      let puntosTeam1 = 0;
+      let puntosTeam2 = 0;
+      
+      if (score[0] > score[1]) {
+        puntosTeam1 = 3;
+      } else if (score[0] < score[1]) {
+        puntosTeam2 = 3;
+      } else {
+        puntosTeam1 = 1;
+        puntosTeam2 = 1;
+      }
+      
+      const team1 = this.clubs.find(c => c.name === team1Name);
+      const team2 = this.clubs.find(c => c.name === team2Name);
+      
+      if (!team1 || !team2) {
+        console.error("Error: No se encontraron los equipos en la base de datos");
+        return;
+      }
+      
       try {
-        const response = await fetch("http://localhost:3000/matches");
-        this.todosPartidos = await response.json();
+        await fetch(`http://localhost:3000/clubs/${team1.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ points: team1.points + puntosTeam1 })
+        });
 
-        // Agrupar jornadas por número y tomar la primera fecha de cada jornada
+        await fetch(`http://localhost:3000/clubs/${team2.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ points: team2.points + puntosTeam2 })
+        });
+      } catch (error) {
+        console.error("Error actualizando puntos:", error);
+      }
+    },
+
+    async cargarDatos() {
+      try {
+        const matchesResponse = await fetch("http://localhost:3000/matches");
+        this.todosPartidos = await matchesResponse.json();
+
+        const clubsResponse = await fetch("http://localhost:3000/clubs");
+        this.clubs = await clubsResponse.json();
+
         const jornadasMap = new Map();
         this.todosPartidos.forEach(p => {
           if (!jornadasMap.has(p.round)) {
@@ -106,15 +147,16 @@ export default {
           .sort((a, b) => a.round - b.round);
           
       } catch (error) {
-        console.error("Error cargando partidos:", error);
+        console.error("Error cargando datos:", error);
       }
     }
   },
   created() {
-    this.cargarTodosPartidos();
+    this.cargarDatos();
   }
 };
 </script>
+
 <style>
 .container {
   max-width: 600px;
