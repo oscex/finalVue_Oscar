@@ -31,7 +31,6 @@
       </div>
     </div>
 
-    <!-- Aquí pasamos el equipo seleccionado al componente de "Añadir Jugador" -->
     <FormularioNuevoJugador :equipoFijo="equipoSeleccionado" />
   </div>
 </template>
@@ -186,5 +185,4 @@ export default {
     font-style: italic;
     padding: 10px;
   }
-  /* El resto de estilos se mantiene igual */
   </style>

@@ -2,7 +2,6 @@
   <div class="container">
     <h1>Jornadas</h1>
 
-    <!-- Selector de jornada -->
     <select v-model="jornadaSeleccionada" @change="cargarPartidos">
       <option value="" disabled>Selecciona una jornada</option>
       <option v-for="jornada in jornadas" :key="jornada.round" :value="jornada">
@@ -10,7 +9,6 @@
       </option>
     </select>
 
-    <!-- Lista de partidos -->
     <div v-if="partidos.length > 0" class="partidos">
       <div v-for="partido in partidos" :key="partido.id" class="partido">
         <div class="equipos">
@@ -19,7 +17,6 @@
           <span>{{ partido.team2 }}</span>
         </div>
 
-        <!-- Resultado o inputs para introducir resultado -->
         <div v-if="partido.score" class="resultado">
           {{ partido.score[0] }} - {{ partido.score[1] }}
         </div>
@@ -42,7 +39,7 @@ export default {
       partidos: [],
       jornadaSeleccionada: null,
       todosPartidos: [],
-      clubs: [] // Lista de clubes con ID y puntos
+      clubs: []
     };
   },
   methods: {

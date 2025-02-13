@@ -2,7 +2,6 @@
             <h2>Equipos</h2>
     <div class="container">
       <div class="jugadores-container">
-        <!-- Sección de Equipos (izquierda) -->
         <div class="equipos">
           <ul>
             <li 
@@ -16,7 +15,6 @@
           </ul>
         </div>
   
-        <!-- Sección de Detalle de Jugadores (derecha) -->
         <div class="detalle-jugadores">
           <h2 v-if="equipoSeleccionado">Jugadores de {{ equipoSeleccionado.name }}</h2>
           
@@ -48,15 +46,14 @@
   export default {
     data() {
       return {
-        equipos: [], // Lista de equipos
-        equipoSeleccionado: null, // Equipo seleccionado
-        jugadores: [], // Jugadores del equipo seleccionado
-        jugadorSeleccionado: null, // Jugador seleccionado
-        nuevosGoles: 0 // Goles que se sumarán al jugador
+        equipos: [],
+        equipoSeleccionado: null,
+        jugadores: [],
+        jugadorSeleccionado: null,
+        nuevosGoles: 0
       };
     },
     methods: {
-      // Cargar equipos desde el archivo bbdd.json (simulación)
       cargarEquipos() {
         fetch("http://localhost:3000/clubs")
           .then(response => response.json())
@@ -66,15 +63,12 @@
           .catch(error => console.error("Error cargando equipos:", error));
       },
   
-      // Seleccionar un equipo y cargar sus jugadores
       seleccionarEquipo(equipo) {
-        // Limpiar la selección de jugador al cambiar de equipo
         this.jugadorSeleccionado = null;
         this.equipoSeleccionado = equipo;
         this.cargarJugadores(equipo.name);
       },
   
-      // Cargar jugadores de un equipo
       cargarJugadores(nombreEquipo) {
         fetch("http://localhost:3000/players")
           .then(response => response.json())
@@ -84,18 +78,15 @@
           .catch(error => console.error("Error cargando jugadores:", error));
       },
   
-      // Seleccionar un jugador y mostrar sus detalles
       seleccionarJugador(jugador) {
         this.jugadorSeleccionado = jugador;
-        this.nuevosGoles = 0; // Reiniciar los goles
+        this.nuevosGoles = 0;
       },
   
-      // Sumar goles al jugador
       sumarGoles() {
         if (this.jugadorSeleccionado && this.nuevosGoles > 0) {
           this.jugadorSeleccionado.scores += this.nuevosGoles;
   
-          // Actualizar el jugador en la base de datos
           fetch(`http://localhost:3000/players/${this.jugadorSeleccionado.id}`, {
             method: "PUT",
             headers: {
@@ -103,30 +94,28 @@
             },
             body: JSON.stringify(this.jugadorSeleccionado)
           }).then(() => {
-            this.nuevosGoles = 0; // Limpiar el campo de goles
+            this.nuevosGoles = 0;
           });
         }
       },
   
-      // Eliminar un jugador de la base de datos
       eliminarJugador() {
         if (this.jugadorSeleccionado) {
-          // Eliminar el jugador en el archivo bbdd.json
           fetch(`http://localhost:3000/players/${this.jugadorSeleccionado.id}`, {
             method: "DELETE"
           }).then(() => {
-            // Eliminar el jugador de la lista local
+
             const index = this.jugadores.findIndex(jugador => jugador.id === this.jugadorSeleccionado.id);
             if (index !== -1) {
               this.jugadores.splice(index, 1);
-              this.jugadorSeleccionado = null; // Limpiar la selección del jugador
+              this.jugadorSeleccionado = null;
             }
           });
         }
       }
     },
     created() {
-      this.cargarEquipos(); // Cargar los equipos al crear el componente
+      this.cargarEquipos();
     }
   };
   </script>
@@ -135,7 +124,7 @@
   .container {
     display: flex;
     padding: 20px;
-    width: 90%; /* Hacer el contenedor más ancho en la pantalla */
+    width: 90%;
     margin: 0 auto;
   }
   
@@ -145,10 +134,10 @@
   }
   
   .equipos {
-    width: 55%; /* Sección de equipos ahora ocupa el 55% del ancho */
-    height: 80vh; /* Limitar la altura de la sección de equipos */
-    overflow-y: auto; /* Permitimos desplazamiento si hay muchos equipos */
-    border-right: 3px solid #ff4b44; /* Borde rojo grueso para separar */
+    width: 55%;
+    height: 80vh;
+    overflow-y: auto;
+    border-right: 3px solid #ff4b44;
     padding-right: 20px;
     padding-left: 10px;
   }
@@ -169,7 +158,7 @@
   
   .equipos li.seleccionado {
     font-weight: bold;
-    color: #ff4b44; /* Rojo para los equipos seleccionados */
+    color: #ff4b44;
   }
   
   .equipos li:hover {
@@ -177,10 +166,10 @@
   }
   
   .detalle-jugadores {
-    width: 40%; /* La sección de jugadores ocupa el 40% del ancho */
+    width: 40%;
     padding-left: 20px;
-    height: 80vh; /* Limitar la altura de la sección de jugadores */
-    overflow-y: auto; /* Permitimos el desplazamiento si es necesario */
+    height: 80vh;
+    overflow-y: auto;
     padding-top: 20px;
   }
   
@@ -207,7 +196,7 @@
   }
   
   button:hover {
-    background-color: #d93d38; /* Color de hover para los botones */
+    background-color: #d93d38;
   }
   
   input {
