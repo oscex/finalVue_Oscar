@@ -17,7 +17,8 @@
         <div v-if="equipo.players && equipo.players.length > 0" class="jugadores-lista">
           <div v-for="jugador in equipo.players" :key="jugador.id" class="jugador">
             <span>{{ jugador.name }}</span>
-            <span class="goles">{{ jugador.goals }} goles</span>
+            <span v-if="jugador.scores > 0" class="goles">{{ jugador.scores }} goles</span>
+            <span v-else>Sin goles</span>
           </div>
         </div>
         <div v-else class="sin-jugadores">
@@ -36,7 +37,7 @@
 
     <NuevoJugador 
       v-if="mostrarFormulario" 
-      :equipoFijo="equipoSeleccionado"
+      :equipoFijo="equipoSeleccionado.name"
       @jugadorCreado="actualizarListaJugadores"
     />
   </div>

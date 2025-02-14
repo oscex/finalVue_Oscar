@@ -30,16 +30,12 @@
         </transition>
       </div>
     </div>
-
-    <FormularioNuevoJugador :equipoFijo="equipoSeleccionado" />
   </div>
 </template>
 
 <script>
-import FormularioNuevoJugador from '../components/formularioNuevoJugador.vue';
 
 export default {
-  components: { FormularioNuevoJugador },
   data() {
     return {
       equipos: [],
